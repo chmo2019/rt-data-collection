@@ -1,5 +1,7 @@
 // builtins
+// const tls = require('tls');
 const net = require('net');
+const fs = require('fs');
 
 // load env variables
 require('dotenv').config();
@@ -8,29 +10,27 @@ require('dotenv').config();
 // TODO: add ssl
 const server = net.createServer();
 
-// connect sockets
-let sockets = [];
+function tryParseJson(str) {
+    try {
+        JSON.parse(str.toString());
+    } catch (e) {
+        return false;
+    }
+    return JSON.parse(str.toString());
+}
 
 // listen to connection events: https://www.digitalocean.com/community/tutorials/how-to-develop-a-node-js-tcp-server-application-using-pm2-and-nginx-on-ubuntu-16-04
 server.on('connection', (sock) => { 
-    console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
-    sockets.push(sock);
-
     sock.on('data', function(data) {
         console.log('DATA ' + sock.remoteAddress + ': ' + data);
-        // Write the data back to all the connected, the client will receive it as data from the server
-        sockets.forEach(function(sock, index, array) {
-            sock.write(sock.remoteAddress + ':' + sock.remotePort + " said " + data + '\n');
-        });
-    });
-
-    // Add a 'close' event handler to this instance of socket
-    sock.on('close', function(data) {
-        let index = sockets.findIndex(function(o) {
-            return o.remoteAddress === sock.remoteAddress && o.remotePort === sock.remotePort;
-        })
-        if (index !== -1) sockets.splice(index, 1);
-        console.log('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort);
+        const parsedData = tryParseJson(data);
+        if (parsedData) {
+            fs.appendFile(`${process.env.DATA_PATH}${parsedData.name}.txt`, `${parsedData.ts},${parsedData.data}\n`, (err) => {
+                if (err) return console.log(err);
+                console.log(parsedData);
+            })
+        }
+        sock.write(sock.remoteAddress + ':' + sock.remotePort + " said " + data + '\n');
     });
 });
 
