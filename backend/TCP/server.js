@@ -117,6 +117,6 @@ tcp.listen(process.env.TCP_PORT, process.env.HOST, () => {
 });
 
 // start http server
-server.listen(process.env.HTTP_PORT, () => {
-    console.log('HTTP Server running on port ' + process.env.HTTP_PORT);
-})
+// server.listen(process.env.HTTP_PORT, () => {
+//     console.log('HTTP Server running on port ' + process.env.HTTP_PORT);
+// })
