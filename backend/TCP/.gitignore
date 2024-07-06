@@ -1,4 +1,6 @@
 node_modules/
+nginx/config.json
+ssl/
 data/*
 *.py
 .env
