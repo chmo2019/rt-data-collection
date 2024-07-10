@@ -10,6 +10,6 @@ RUN npm install
 
 COPY . $APP
 
-EXPOSE 7070
+# EXPOSE 7070
 
 CMD [ "node", "server.js" ]
