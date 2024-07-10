@@ -1,0 +1,7 @@
+node_modules/
+nginx/
+data/
+ssl/
+package-lock.json
+*.py
+*.html

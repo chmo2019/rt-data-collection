@@ -6,3 +6,4 @@ data/*
 .env
 *.pem
 *.html
+package-lock.json
