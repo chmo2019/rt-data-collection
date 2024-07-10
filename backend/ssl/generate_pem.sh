@@ -7,9 +7,11 @@
 KEY_PATH=$PWD/certs
 
 SUBJ_KEYS=("C" "ST" "L" "O" "OU" "CN")
-SUBJ_VALS=($(jq -r '.[]' ./config.json))
+SUBJ_VALS=($(jq -r '.[]' config.json))
+CA_SUBJ_VALS=($(jq -r '.[]' ca_config.json))
 
 SUBJ=""
+CA_SUBJ=""
 
 make_dirs () {
     mkdir -p $KEY_PATH
@@ -22,9 +24,16 @@ get_subj () {
     done
 }
 
+get_ca_subj () {
+    for i in {0..5}
+    do
+        CA_SUBJ+="/${SUBJ_KEYS[i]}=${CA_SUBJ_VALS[i]}";
+    done
+}
+
 gen_ca () {
     openssl genpkey -algorithm RSA -out $KEY_PATH/ca.key
-    openssl req -new -x509 -key $KEY_PATH/ca.key -out $KEY_PATH/ca.crt -subj $SUBJ
+    openssl req -new -x509 -key $KEY_PATH/ca.key -out $KEY_PATH/ca.crt -subj $CA_SUBJ
 }
 
 gen_server () {
@@ -42,6 +51,8 @@ gen_client () {
 echo "creating ssl certs..."
 
 get_subj
+
+get_ca_subj
 
 make_dirs
 
