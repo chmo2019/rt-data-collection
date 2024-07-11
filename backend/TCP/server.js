@@ -44,11 +44,11 @@ function getData(payload) {
 
     // write to file if data is valid
     if (parsedData) {
-        // fs.appendFile(`${process.env.DATA_PATH}${parsedData.name}.txt`, `${parsedData.ts},${parsedData.data}\n`, (err) => {
-        //     if (err) return console.log(err);
-        //     // console.log(parsedData);
-        // })
-        console.log(parsedData);
+        fs.appendFile(`${process.env.DATA_PATH}${parsedData.name}.txt`, `${parsedData.ts},${parsedData.data}\n`, (err) => {
+            if (err) return console.log(err);
+            console.log(parsedData);
+        })
+        // console.log(parsedData);
     }
 
     // send data back to node

@@ -10,6 +10,8 @@ services:
       context: TCP
     ports:
       - "7070:7070/tcp"
+    volumes:
+      - ./TCP/data/:/app/data
     networks:
       - node
     working_dir: /app
