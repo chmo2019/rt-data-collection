@@ -7,11 +7,11 @@ networks:
 services:
   nodejs:
     build:
-      context: TCP
+      context: server
     ports:
       - "7070:7070/tcp"
     volumes:
-      - ./TCP/data/:/app/data
+      - ./server/data/:/app/data
     networks:
       - node
     working_dir: /app
